@@ -13,35 +13,34 @@ final class AsyncWorker {
         // ...что-то асинхронное
         completion(name)
     }
-    
+}
+
+extension AsyncWorker {
     func doJobs(names: [String], completion: @escaping ([String]) -> Void) {
         
         let group = DispatchGroup()
         var result = Array(repeating: "", count: names.count)
-        let lock = NSLock()
+        let locker = NSLock()
         
         for (index, name) in names.enumerated() {
             group.enter()
-            
             doTheJob(name: name) { newName in
-                lock.lock()
+                locker.lock()
                 result[index] = newName
-                lock.unlock()
+                locker.unlock()
                 group.leave()
             }
-            
         }
         
         group.notify(queue: .main) {
             completion(result)
         }
     }
-    
 }
 
-let anyncWorker = AsyncWorker()
-var names = ["kostya", "nastya", "Левон", "daniil"]
+var names = ["name1", "name2", "name3", "name4"]
+let asyncWorker = AsyncWorker()
 
-anyncWorker.doJobs(names: names) { result in
+asyncWorker.doJobs(names: names) { result in
     print(result)
 }

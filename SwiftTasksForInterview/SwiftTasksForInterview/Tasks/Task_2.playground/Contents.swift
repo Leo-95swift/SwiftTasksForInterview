@@ -7,25 +7,30 @@ import UIKit
 */
 
 protocol P {
-   func method()
+    // обращаем внимание что в самом протоколе не обявлен метод
 }
 
 extension P {
+    // здесь у нас дифольтная реализация
     func method() {
         print("In Protocol")
     }
 }
 
 struct S: P {
+    // подчиняется протоколу но есть собственная реализация
     func method() {
         print ("In struct")
     }
 }
 
 let myStruct = S()
+// у myStruct тип S
 let myProtocol: P = myStruct
+// у myProtocol тип P
 
-myStruct.method() // in struct
-myProtocol.method() // in struct
+myStruct.method() // In Struct
+myProtocol.method() // In protocol
 
-
+// чтобы у обеих в консоле вывелся In Struct
+// надо лишь добавить в протокол func method()
